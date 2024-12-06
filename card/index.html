@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Image Slider and Draggable text using HTML CSS & JavaScript</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+  <div class="content">
+    <div class="images">
+       <img src="img1.png">
+       <img src="img2.png">
+       <img src="img4.png">
+       <img src="img8.png">
+       <img src="img7.png">
+       <img src="img6.png">
+       <img src="img5.png">
+       <img src="img3.png">
+    </div>
+    <div class="btm-slides">
+       <span onclick="btm_slide(1)"></span>
+       <span onclick="btm_slide(2)"></span>
+       <span onclick="btm_slide(3)"></span>
+       <span onclick="btm_slide(4)"></span>
+       <span onclick="btm_slide(5)"></span>
+       <span onclick="btm_slide(6)"></span>
+       <span onclick="btm_slide(7)"></span>
+       <span onclick="btm_slide(8)"></span>
+    </div>
+    <div class="sliders left" onclick="side_slide(-1)">
+       <span class="fas fa-angle-left"></span>
+    </div>
+    <div class="sliders right" onclick="side_slide(1)">
+       <span class="fas fa-angle-right"></span>
+    </div>
+ </div>
+ 
+ <section class="header-content">
+    <div class="dropdown">
+      <button id="change-typography">Change Typography</button>
+      <div class="dropdown-content">
+         <a href="#" onclick="changeFont('Arial')">Arial</a>
+         <a href="#" onclick="changeFont('Georgia')">Georgia</a>
+         <a href="#" onclick="changeFont('Courier New')">Courier New</a>
+         <a href="#" onclick="changeFont('Verdana')">Verdana</a>
+      </div>
+   </div>           
+    <p id="draggable-text" style="position: absolute; cursor: grab;" class="example">We invite you and your family gracious presence and blessing</p>
+     
+ </section>
+ 
+ <script>
+    const draggableText = document.getElementById("draggable-text");
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    draggableText.addEventListener("mousedown", (e) => {
+       isDragging = true;
+       offsetX = e.clientX - draggableText.offsetLeft;
+       offsetY = e.clientY - draggableText.offsetTop;
+       draggableText.style.cursor = "grabbing";
+    });
+
+    document.addEventListener("mousemove", (e) => {
+       if (isDragging) {
+          draggableText.style.left = `${e.clientX - offsetX}px`;
+          draggableText.style.top = `${e.clientY - offsetY}px`;
+       }
+    });
+
+    document.addEventListener("mouseup", () => {
+       isDragging = false;
+       draggableText.style.cursor = "grab";
+    });
+
+    function changeFont(fontName) {
+       const paragraph = document.getElementById("draggable-text");
+       paragraph.style.fontFamily = fontName;
+    }
+
+    let indexValue = 1;
+    showImg(indexValue);
+
+    function btm_slide(e) {
+       showImg(indexValue = e);
+    }
+    function side_slide(e) {
+       showImg(indexValue += e);
+    }
+    function showImg(e) {
+       let i;
+       const img = document.querySelectorAll('.images img');
+       const slider = document.querySelectorAll('.btm-slides span');
+       if (e > img.length) { indexValue = 1 }
+       if (e < 1) { indexValue = img.length }
+       for (i = 0; i < img.length; i++) {
+          img[i].style.display = "none";
+       }
+       for (i = 0; i < slider.length; i++) {
+          slider[i].className = slider[i].className.replace(" active", "");
+       }
+       img[indexValue - 1].style.display = "block";
+       slider[indexValue - 1].className += " active";
+    }
+
+    document.getElementById('change-typography').addEventListener('click', function() {
+       const dropdownContent = document.querySelector('.dropdown-content');
+       dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    });
+ </script>
+</body>
+</html>
